@@ -15,6 +15,12 @@ setuptools.setup(
 
     install_requires=[],
 
+    entry_points={
+        'console_scripts': [
+            'dovecot-acl-inherit = dacli.__main__:main'
+        ]
+    },
+
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Programming Language :: Python',

@@ -1,0 +1,4 @@
+{
+  "tests/test_functional.py::test_story": true,
+  "tests/test_units.py::test_delegate_acl_with_child_as_parent": true
+}
