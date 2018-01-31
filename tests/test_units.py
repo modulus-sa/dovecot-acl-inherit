@@ -32,6 +32,16 @@ def test_get_parent():
     assert parent == '.mailbox1'
 
 
+def test_parent_that_doesnt_exist():
+    with pytest.raises(FileNotFoundError):
+        get_parent('NOT_EXISTING')
+
+
+def test_parent_that_isnt_a_mailbox():
+    with pytest.raises(NotADirectoryError):
+        get_parent('not_a_mailbox')
+
+
 @pytest.mark.parametrize('parent, children', [
     ('.mailbox0',
      ['.mailbox0.mailbox0sub0']),
@@ -43,8 +53,22 @@ def test_get_parent():
 def test_get_children(parent, children):
     result = get_children(parent)
 
-    assert list(result) == children
+    assert result == children
 
+
+def test_get_children_with_exclude():
+    results = get_children('.mailbox1', exclude=['mailbox1sub0sub0'])
+
+    assert results == ['.mailbox1.mailbox1sub0',
+                       '.mailbox1.mailbox1sub0.mailbox1sub0sub1']
+
+    results = get_children('.mailbox2', exclude=['common'])
+
+    assert set(results) == {'.mailbox2.mailbox2sub0',
+                            '.mailbox2.mailbox2sub0.mailbox2sub0sub1',
+                            '.mailbox2.mailbox2sub1',
+                            '.mailbox2.mailbox2sub1.mailbox2sub1sub1'}
+    assert len(results) == 4
 
 @pytest.mark.parametrize('mailbox, parent_acl_path, children_acl_paths',
 [

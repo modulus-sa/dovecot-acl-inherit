@@ -1,4 +1,5 @@
 {
   "tests/test_functional.py::test_story": true,
-  "tests/test_units.py::test_delegate_acl_with_child_as_parent": true
+  "tests/test_units.py::test_delegate_acl_with_child_as_parent": true,
+  "tests/test_units.py::test_get_children[mailbox0-children0]": true
 }
