@@ -65,10 +65,13 @@ def test_get_children_with_exclude():
     results = get_children('.mailbox2', exclude=['common'])
 
     assert set(results) == {'.mailbox2.mailbox2sub0',
-                            '.mailbox2.mailbox2sub0.mailbox2sub0sub1',
                             '.mailbox2.mailbox2sub1',
-                            '.mailbox2.mailbox2sub1.mailbox2sub1sub1'}
-    assert len(results) == 4
+                            '.mailbox2.mailbox2sub0.mailbox2sub0sub1',
+                            '.mailbox2.mailbox2sub1.mailbox2sub1sub1',
+                            '.mailbox2.mailbox2sub0.common.commonsub0',
+                            '.mailbox2.mailbox2sub1.common.commonsub1'}
+    assert len(results) == 6
+
 
 @pytest.mark.parametrize('mailbox, parent_acl_path, children_acl_paths',
 [

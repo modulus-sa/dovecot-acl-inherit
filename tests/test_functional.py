@@ -45,13 +45,15 @@ def test_story(cleanup_files):
 
     # runs command with '-e' option excluding common mailboxes
     proc = run('-e common mailbox2')
-    print("OUT:", proc.stdout)
     # this will exclude all children named 'common'
     # for all intermediate children of 'mailbox2'
+    # but NOT children of 'common' itself
     for child in ['.mailbox2.mailbox2sub0',
                   '.mailbox2.mailbox2sub0.mailbox2sub0sub1',
                   '.mailbox2.mailbox2sub1',
-                  '.mailbox2.mailbox2sub1.mailbox2sub1sub1']:
+                  '.mailbox2.mailbox2sub1.mailbox2sub1sub1',
+                  '.mailbox2.mailbox2sub0.common.commonsub0',
+                  '.mailbox2.mailbox2sub0.common.commonsub0']:
         assert path.isfile(path.join(child, 'dovecot-acl'))
     for child in ['.mailbox2.mailbox2sub0.common',
                   '.mailbox2.mailbox2sub1.common']:
@@ -59,5 +61,14 @@ def test_story(cleanup_files):
 
     # runs command with '-e' option and a glob pattern
     proc = run('-e common* mailbox3')
+    for child in ['.mailbox3.mailbox3sub0',
+                  '.mailbox3.mailbox3sub0.sub0',
+                  '.mailbox3.mailbox3sub1',
+                  '.mailbox3.mailbox3sub1.sub0']:
+        assert path.isfile(path.join(child, 'dovecot-acl'))
 
-    assert 0, 'Finish Story'
+    for child in ['.mailbox3.mailbox3sub0.common',
+                  '.mailbox3.mailbox3sub0.common.commonsub0',
+                  '.mailbox3.mailbox3sub1.common',
+                  '.mailbox3.mailbox3sub1.common.commonsub1']:
+        assert not path.exists(path.join(child, 'dovecot-acl'))
