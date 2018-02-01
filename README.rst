@@ -14,17 +14,34 @@ Adhoc command to delegate dovecot ACL files to mailboxes
 Usage
 -----
 
+Copy ACL file of mailbox to all of it's children
+
+``dovecot-acl-inherit parent_mailbox``
+
+
+Exclude children mailboxes
+
+``dovecot-acl-inherit -e child_mailbox parent_mailbox``
+
+
+Exclude children mailboxes based on glob pattern
+
+``dovecot-acl-inherit -e child_mailbox.* parent_mailbox``
+
 Installation
 ------------
 
-Requirements
-^^^^^^^^^^^^
+``pip install dovecot-acl-inherit``
 
 Compatibility
 -------------
 
+python3.5+
+
 Licence
 -------
+
+MIT
 
 Authors
 -------
