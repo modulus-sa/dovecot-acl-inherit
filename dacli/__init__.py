@@ -1,4 +1,4 @@
-"""dovecot-acl-inherit - Adhoc command to delegate dovecot ACL files to mailboxes"""
+"""dovecot-acl-inherit - Adhoc command to inherit dovecot ACL files to children mailboxes"""
 
 __version__ = '0.1.0'
 __author__ = 'Konstantinos Tsakiltzidis <ktsakiltzidis@modulus.gr>'
@@ -13,12 +13,14 @@ import sys
 from itertools import chain
 
 
+SEP = '.'
+
+
 def delegate_acl(parent, exclude=None):
     parent = get_parent(parent)
     parent_acl_path = os.path.join(parent, 'dovecot-acl')
     children = get_children(parent, exclude=exclude)
 
-    print('CHILDREN', children, file=sys.stdout)
     for child in children:
         shutil.copy(parent_acl_path, child)
 
@@ -33,7 +35,7 @@ def get_parent(name):
 
 
 def get_children(parent, exclude=None):
-    children_pattern = '{}.*'.format(parent)
+    children_pattern = '{}{}**'.format(parent, SEP)
     children = glob.glob(children_pattern)
     if exclude is not None:
         exclude_patterns = ['{}*{}'.format(children_pattern, pattern)
@@ -45,9 +47,10 @@ def get_children(parent, exclude=None):
 
 
 def make_parser():
-    parser = argparse.ArgumentParser(description='Delegate dovecot ACL files to mailboxes')
+    parser = argparse.ArgumentParser(description='Inherit dovecot ACL files to children mailboxes')
     parser.add_argument('mailbox')
-    parser.add_argument('-e', '--exclude', action='append')
+    parser.add_argument('-e', '--exclude', action='append',
+                        help='exclude mathcing mailboxes, can be a glob pattern')
     return parser
 
 
